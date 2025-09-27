@@ -178,7 +178,12 @@ def submit_name():
                 blocked.lower() in clean_name or
                 blocked_clean in leetspeak_clean or
                 blocked.lower() in leetspeak_clean):
-                return render_template('blocked.html', title='Access Denied', attempted_name=user_name, reason="creator_protection")
+                return render_template('blocked.html', 
+                                     title='Access Denied', 
+                                     attempted_name=user_name, 
+                                     reason="creator_protection",
+                                     average_rating=ratings_data["average"], 
+                                     total_ratings=ratings_data["total_ratings"])
         
         # SECOND: Check for profanity AFTER name protection (excluding creator names)
         if contains_profanity_excluding_creator(user_name):
@@ -189,7 +194,12 @@ def submit_name():
                 "reason": "profanity_in_name"
             }
             ratings_data["blocked_attempts"].append(blocked_attempt)
-            return render_template('blocked.html', title='Name Blocked', attempted_name=user_name, reason="profanity")
+            return render_template('blocked.html', 
+                                 title='Name Blocked', 
+                                 attempted_name=user_name, 
+                                 reason="profanity",
+                                 average_rating=ratings_data["average"], 
+                                 total_ratings=ratings_data["total_ratings"])
         
         return redirect(url_for('show_message', name=user_name))
     return redirect(url_for('home'))

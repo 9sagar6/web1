@@ -1,6 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
+<!-- Top Ad Banner -->
+<div class="row justify-content-center mb-4">
+    <div class="col-md-10 text-center">
+        <div class="ad-banner">
+            <!-- Google AdSense Banner Ad -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-3268994719996665"
+                 data-ad-slot="1234567890"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </div>
+</div>
+
 <div class="row justify-content-center">
     <div class="col-md-8 text-center">
         <div class="card border-danger">
@@ -13,7 +31,7 @@
             </div>
         </div>
 
-        <!-- Rating Section -->
+                <!-- Rating Section -->
         <div class="mt-4">
             <div class="card">
                 <div class="card-body">
@@ -29,6 +47,37 @@
                         Rate Us Now! ⭐
                     </button>
                     <a href="{{ url_for('view_ratings') }}" class="btn btn-outline-info ms-2">View All Ratings</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <!-- Side Ad (Medium Rectangle) -->
+                <div class="ad-sidebar">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-3268994719996665"
+                         data-ad-slot="0987654321"
+                         data-ad-format="rectangle"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Ad Banner -->
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-10 text-center">
+                <div class="ad-banner">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-3268994719996665"
+                         data-ad-slot="1111222233"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
                 </div>
             </div>
         </div>

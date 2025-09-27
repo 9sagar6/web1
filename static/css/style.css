@@ -29,6 +29,40 @@ pre code {
     font-size: 0.9rem;
 }
 
+/* Ad styling */
+.ad-banner, .ad-sidebar {
+    margin: 20px 0;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border: 1px solid #e9ecef;
+}
+
+.ad-banner {
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ad-sidebar {
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Mobile responsive ads */
+@media (max-width: 768px) {
+    .ad-sidebar {
+        display: none;
+    }
+    
+    .ad-banner {
+        min-height: 100px;
+    }
+}
+
 footer {
     margin-top: auto;
 }
