@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-10 mx-auto">
+        <h2>📊 Website Ratings & Reviews</h2>
+        
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="text-primary">{{ ratings_data.average or 0 }}/5</h3>
+                        <p class="text-muted">Average Rating</p>
+                        <div class="stars">
+                            {% for i in range(1, 6) %}
+                                {% if ratings_data.average and i <= ratings_data.average %}
+                                    ⭐
+                                {% else %}
+                                    ☆
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="text-success">{{ ratings_data.total_ratings }}</h3>
+                        <p class="text-muted">Total Ratings</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="text-info">{{ ratings_data.total_score }}</h3>
+                        <p class="text-muted">Total Score</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if ratings_data.ratings %}
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4>Recent Reviews:</h4>
+                <div>
+                    <a href="{{ url_for('view_blocked_comments') }}" class="btn btn-danger btn-sm">
+                        �️ Protection Dashboard
+                    </a>
+                </div>
+            </div>
+            {% for rating in ratings_data.ratings[-20:] %}
+                <div class="card mb-3" id="comment-{{ rating.id }}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div class="flex-grow-1">
+                                <div class="rating mb-2">
+                                    {% for i in range(1, 6) %}
+                                        {% if i <= rating.rating %}
+                                            ⭐
+                                        {% else %}
+                                            ☆
+                                        {% endif %}
+                                    {% endfor %}
+                                    <span class="ms-2 text-muted">{{ rating.rating }}/5</span>
+                                </div>
+                                {% if rating.comment %}
+                                    <p class="mb-1">"{{ rating.comment }}"</p>
+                                {% endif %}
+                                <small class="text-muted">IP: {{ rating.ip }}</small>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <small class="text-muted mb-2">
+                                    {{ rating.timestamp.split('T')[0] }}
+                                </small>
+                                <button class="btn btn-danger btn-sm" onclick="deleteComment({{ rating.id }})">
+                                    🗑️ Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-info text-center">
+                <h4>No ratings yet! 🌟</h4>
+                <p>Be the first to rate our roasting experience!</p>
+                <a href="{{ url_for('home') }}" class="btn btn-primary">Try the Roaster</a>
+            </div>
+        {% endif %}
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('home') }}" class="btn btn-primary">Back to Roaster</a>
+        </div>
+    </div>
+</div>
+
+<style>
+.stars {
+    font-size: 1.5rem;
+}
+</style>
+
+<script>
+function deleteComment(commentId) {
+    if (confirm('Are you sure you want to delete this comment?')) {
+        fetch('/delete_comment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                comment_id: commentId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Remove the comment from the page
+                document.getElementById('comment-' + commentId).remove();
+                alert('Comment deleted successfully!');
+                // Reload to update stats
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            alert('Error deleting comment');
+        });
+    }
+}
+</script>
+{% endblock %}

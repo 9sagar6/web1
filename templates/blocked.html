@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if show_admin_panel %}
+    <!-- Admin Panel for viewing                                                          <p class="text-warning"><strong>The website creator is STILL protected!</strong> 🛡️👑</p>                    <h4 class="text-danger">🔥 EXTRA ROAST FOR THE SMART FRIEND:</h4>          <p>Try being creative with OTHER people's names! 😝</p>  <p class="text-muted">But my AI is SMARTER than your tricks! 🧠🤖</p>locked attempts -->
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <h2>� Admin Panel - All Blocked Attempts</h2>
+            
+            <!-- Profanity Blocks -->
+            <h3 class="text-danger">🤬 Profanity Blocked</h3>
+            {% if blocked_data.profanity %}
+                <div class="alert alert-danger">
+                    <strong>Total Profanity Blocks:</strong> {{ blocked_data.profanity|length }}
+                </div>
+                {% for attempt in blocked_data.profanity %}
+                    <div class="card mb-3 border-danger">
+                        <div class="card-body">
+                            <h6 class="text-danger">🚫 PROFANITY BLOCKED</h6>
+                            <p><strong>Content:</strong> "{{ attempt.comment or attempt.name }}"</p>
+                            <small class="text-muted">{{ attempt.timestamp }} | IP: {{ attempt.ip }}</small>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-success">No profanity attempts!</div>
+            {% endif %}
+            
+            <!-- Spam Blocks -->
+            <h3 class="text-warning">🤖 Spam Blocked</h3>
+            {% if blocked_data.spam %}
+                <div class="alert alert-warning">
+                    <strong>Total Spam Blocks:</strong> {{ blocked_data.spam|length }}
+                </div>
+                {% for attempt in blocked_data.spam %}
+                    <div class="card mb-3 border-warning">
+                        <div class="card-body">
+                            <h6 class="text-warning">🤖 SPAM BLOCKED</h6>
+                            <p><strong>Content:</strong> "{{ attempt.comment }}"</p>
+                            <small class="text-muted">{{ attempt.timestamp }} | IP: {{ attempt.ip }}</small>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-success">No spam attempts!</div>
+            {% endif %}
+            
+            <!-- Duplicate Blocks -->
+            <h3 class="text-info">🔄 Duplicates Blocked</h3>
+            {% if blocked_data.duplicates %}
+                <div class="alert alert-info">
+                    <strong>Total Duplicate Blocks:</strong> {{ blocked_data.duplicates|length }}
+                </div>
+                {% for attempt in blocked_data.duplicates %}
+                    <div class="card mb-3 border-info">
+                        <div class="card-body">
+                            <h6 class="text-info">🔄 DUPLICATE BLOCKED</h6>
+                            <p><strong>Content:</strong> "{{ attempt.comment }}"</p>
+                            <small class="text-muted">{{ attempt.timestamp }} | IP: {{ attempt.ip }}</small>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-success">No duplicate attempts!</div>
+            {% endif %}
+            
+            <div class="text-center mt-4">
+                <a href="{{ url_for('view_ratings') }}" class="btn btn-primary">Back to Ratings</a>
+                <a href="{{ url_for('home') }}" class="btn btn-outline-primary ms-2">Home</a>
+            </div>
+        </div>
+    </div>
+{% elif reason == "profanity" %}
+    <!-- Profanity in Name Block -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="card border-danger">
+                <div class="card-body">
+                    <h1 class="display-1 text-danger mb-4">🤬</h1>
+                    <h2 class="card-title text-danger mb-4">AI PROFANITY DETECTED!</h2>
+                    <h3 class="text-warning mb-3">Your name contains inappropriate language! 🚫</h3>
+                    <p class="lead">You tried: <strong>"{{ attempted_name }}"</strong></p>
+                    <p class="text-muted">But my AI filter caught that! 🤖🛡️</p>
+                    
+                    <div class="alert alert-danger mt-4">
+                        <h5>🤖 AI PROTECTION ACTIVATED:</h5>
+                        <p><strong>Advanced profanity detection active!</strong></p>
+                        <p>English & Hindi words blocked ❌</p>
+                        <p>Leetspeak variations blocked ❌</p>
+                        <p>Symbol substitutions blocked ❌</p>
+                        <p><strong>KEEP IT CLEAN!</strong> 🧼</p>
+                    </div>
+                    
+                    <a href="{{ url_for('home') }}" class="btn btn-primary btn-lg mt-3">
+                        Try Again With Clean Name 🧼
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <!-- Original Name Blocked View -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="card border-success">
+                <div class="card-body">
+                    <h1 class="display-1 text-success mb-4">🛡️</h1>
+                    <h2 class="card-title text-success mb-4">NICE TRY, SMARTASS! 😏</h2>
+                    <h3 class="text-warning mb-3">Did you really think @ symbols would fool me? 🤣</h3>
+                    <p class="lead">You tried: <strong>"{{ attempted_name }}"</strong></p>
+                    <p class="text-muted">But my AI is SMARTER than your tricks! 🧠�</p>
+                    
+                    <div class="alert alert-danger mt-4">
+                        <h5>🕵️ ULTRA-DETECTION ACTIVATED:</h5>
+                        <p>S@GAR = SAGAR ❌</p>
+                        <p>$AGAR = SAGAR ❌</p>
+                        <p>$@G@R = SAGAR ❌</p>
+                        <p>R@THORE = RATHORE ❌</p>
+                        <p>R$THORE = RATHORE ❌</p>
+                        <p>S4G4R = SAGAR ❌</p>
+                        <p>R47H0R3 = RATHORE ❌</p>
+                        <p><strong>NO SYMBOL CAN SAVE YOU!</strong> 😈🛡️</p>
+                    </div>
+                    
+                    <div class="alert alert-info mt-3">
+                        <h5>🎯 For Your Information:</h5>
+                        <p>This website uses ADVANCED name filtering!</p>
+                        <p>Try being creative with OTHER people's names! �</p>
+                    </div>
+                    
+                    <a href="{{ url_for('home') }}" class="btn btn-primary btn-lg mt-3">
+                        Try Again (But Don't) 😏
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Extra savage response -->
+            <div class="mt-4">
+                <div class="card border-danger">
+                    <div class="card-body">
+                        <h4 class="text-danger">� EXTRA ROAST FOR THE SMART FRIEND:</h4>
+                        <h3 class="text-danger">FUCK YOU FOR THINKING YOU'RE CLEVER!</h3>
+                        <p class="text-muted">Using @ symbols? Really? That's your master plan? 😂</p>
+                        <p class="text-warning"><strong>The website creator is STILL protected!</strong> 🛡️�</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}<style>
+.display-1 {
+    font-size: 5rem;
+    animation: shield 2s infinite;
+}
+
+@keyframes shield {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px #28a745);
+    }
+    50% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 20px #28a745);
+    }
+}
+
+.card-body {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-body::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(40, 167, 69, 0.1), transparent);
+    animation: sweep 3s infinite;
+}
+
+@keyframes sweep {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+</style>
+{% endblock %}

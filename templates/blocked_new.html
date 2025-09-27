@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if show_admin_panel %}
+    <!-- ADMIN PANEL - All Blocked Attempts -->
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            <h2>🛡️ ULTIMATE PROTECTION DASHBOARD</h2>
+            <p class="text-muted">AI-powered security system monitoring</p>
+            
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card text-center bg-danger text-white">
+                        <div class="card-body">
+                            <h3>{{ blocked_data.profanity|length }}</h3>
+                            <p class="mb-0">🤬 Profanity Blocked</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center bg-warning text-white">
+                        <div class="card-body">
+                            <h3>{{ blocked_data.spam|length }}</h3>
+                            <p class="mb-0">🚫 Spam Blocked</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center bg-info text-white">
+                        <div class="card-body">
+                            <h3>{{ blocked_data.duplicates|length }}</h3>
+                            <p class="mb-0">🔁 Duplicates Blocked</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center bg-success text-white">
+                        <div class="card-body">
+                            <h3>{{ (blocked_data.profanity|length + blocked_data.spam|length + blocked_data.duplicates|length) }}</h3>
+                            <p class="mb-0">🛡️ Total Blocked</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Blocked Attempts -->
+            {% if blocked_data.profanity or blocked_data.spam or blocked_data.duplicates %}
+                <div class="card">
+                    <div class="card-header">
+                        <h4>🚫 Recent Blocked Attempts</h4>
+                    </div>
+                    <div class="card-body">
+                        {% for attempt in (blocked_data.profanity + blocked_data.spam + blocked_data.duplicates)[-10:] %}
+                            <div class="alert alert-warning mb-2">
+                                <strong>{{ attempt.reason or 'profanity' }}:</strong> "{{ attempt.comment or attempt.name }}"
+                                <br><small>IP: {{ attempt.ip }} | {{ attempt.timestamp.split('T')[0] }}</small>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            
+            <div class="text-center mt-4">
+                <a href="{{ url_for('view_ratings') }}" class="btn btn-primary">Back to Ratings</a>
+            </div>
+        </div>
+    </div>
+
+{% elif reason == "profanity" %}
+    <!-- Profanity in Name Blocked -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="card border-danger">
+                <div class="card-body">
+                    <h1 class="display-1 text-danger mb-4">🤖</h1>
+                    <h2 class="card-title text-danger mb-4">AI DETECTED BAD LANGUAGE!</h2>
+                    <h3 class="text-warning mb-3">Your name contains inappropriate content! 🚫</h3>
+                    <p class="lead">Attempted name: <strong>"{{ attempted_name }}"</strong></p>
+                    <p class="text-muted">My AI is watching everything you type! 🤖👁️</p>
+                    
+                    <div class="alert alert-danger mt-4">
+                        <h5>🤖 AI PROTECTION ACTIVE:</h5>
+                        <p>✅ English profanity detection</p>
+                        <p>✅ Hindi/Urdu bad words blocked</p>
+                        <p>✅ Leetspeak variations caught</p>
+                        <p>✅ Special character tricks detected</p>
+                        <p><strong>NO BAD LANGUAGE ALLOWED ANYWHERE!</strong> 🛡️</p>
+                    </div>
+                    
+                    <a href="{{ url_for('home') }}" class="btn btn-primary btn-lg mt-3">
+                        Try a Clean Name 🧼
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% else %}
+    <!-- Creator Protection -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="card border-success">
+                <div class="card-body">
+                    <h1 class="display-1 text-success mb-4">🛡️</h1>
+                    <h2 class="card-title text-success mb-4">ULTIMATE PROTECTION ACTIVATED! 😏</h2>
+                    <h3 class="text-warning mb-3">AI detected your sneaky attempt! 🤣</h3>
+                    <p class="lead">You tried: <strong>"{{ attempted_name }}"</strong></p>
+                    <p class="text-muted">But my ADVANCED AI is unbeatable! 🧠💪</p>
+                    
+                    <div class="alert alert-danger mt-4">
+                        <h5>🛡️ ULTIMATE PROTECTION FEATURES:</h5>
+                        <p>🤖 AI profanity detection in names</p>
+                        <p>🚫 Special character filtering</p>
+                        <p>🔁 Leetspeak translation</p>
+                        <p>🛡️ Creator name protection</p>
+                        <p><strong>NO TRICKS CAN BYPASS MY AI!</strong> 👑</p>
+                    </div>
+                    
+                    <a href="{{ url_for('home') }}" class="btn btn-primary btn-lg mt-3">
+                        Try Someone Else (Give Up) 😏
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Ultimate Roast -->
+            <div class="mt-4">
+                <div class="card border-warning">
+                    <div class="card-body">
+                        <h4 class="text-warning">🔥 ULTIMATE AI ROAST:</h4>
+                        <h3 class="text-danger">FUCK YOU AND YOUR PATHETIC ATTEMPTS!</h3>
+                        <p class="text-muted">My AI is 1000x smarter than your symbol tricks! 🤖</p>
+                        <p class="text-info"><strong>THE CREATOR REMAINS UNTOUCHABLE!</strong> 👑🛡️</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<style>
+.display-1 {
+    font-size: 5rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+</style>
+{% endblock %}

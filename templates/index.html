@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron bg-primary text-white p-5 rounded mb-4">
+    <h1 class="display-4">Welcome!</h1>
+    <p class="lead">Enter your name to get a personalized message</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title text-center mb-4">What's Your Name?</h5>
+                <form action="{{ url_for('submit_name') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Enter your name:</label>
+                        <input type="text" class="form-control form-control-lg" id="name" name="name" required placeholder="Type your name here...">
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
