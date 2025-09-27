@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, Response, send_from_directory
 import os
 import json
 from datetime import datetime
@@ -21,8 +21,18 @@ BLOCKED_WORDS = [
     'chutiy@', 'ch0du', 'g@ndu', 'b3nch0d', 'madarch0d',
     # Mild but inappropriate
     'stupid', 'idiot', 'moron', 'dumb', 'ugly', 'fat', 'gay',
-    # Your name variations (ULTRA PROTECTION)
-    'sagar', 'rathore', 'sagarrathore', 's4g4r', 'r4th0r3', 'r47h0r3'
+    # Your name variations (ULTRA MAXIMUM PROTECTION)
+    'sagar', 'rathore', 'sagarrathore', 's4g4r', 'r4th0r3', 'r47h0r3',
+    # Short forms and abbreviations (NEW ULTRA PROTECTION!)
+    'sagr', 'sgr', 'sagr', 'sag', 'rath', 'rthr', 'rth', 'sr', 's.r',
+    'sagar.r', 'sagar r', 's rathore', 's.rathore', 'sagr rathore',
+    'sagr rath', 'sag rathore', 's rath', 's rat', 'sagr rat',
+    # Leetspeak short forms
+    's4gr', 'sgr', '$agr', '$gr', 'r4th', 'r7h', '$4gr', '54gr',
+    # Space variations
+    's agr', 'sa gr', 'sag r', 'r ath', 'rat h', 'rath o',
+    # Mixed case bypass attempts
+    'SaGr', 'SAGR', 'RaTh', 'RATH', 'Sr', 'SR'
 ]
 
 def contains_profanity(text):
@@ -155,11 +165,24 @@ def submit_name():
     """Handle name submission with ULTRA AI PROTECTION"""
     user_name = request.form.get('name')
     if user_name:
-        # FIRST: Check for creator name protection (BEFORE profanity check!)
+        # ULTRA ENHANCED NAME PROTECTION (MAXIMUM SECURITY!)
         blocked_names = [
+            # Full names
             'sagar', 'rathore', 'sagar rathore', 'sagarrathore',
             'SAGAR', 'RATHORE', 'SAGAR RATHORE', 'SAGARRATHORE',
-            'Sagar', 'Rathore', 'Sagar Rathore', 'SagarRathore'
+            'Sagar', 'Rathore', 'Sagar Rathore', 'SagarRathore',
+            # Short forms and abbreviations (NEW!)
+            'sagr', 'sgr', 'sag', 'rath', 'rthr', 'rth', 'sr', 's.r',
+            'sagar.r', 'sagar r', 's rathore', 's.rathore', 'sagr rathore',
+            'sagr rath', 'sag rathore', 's rath', 's rat', 'sagr rat',
+            # Leetspeak short forms
+            's4gr', '$agr', '$gr', 'r4th', 'r7h', '$4gr', '54gr',
+            # Space variations
+            's agr', 'sa gr', 'sag r', 'r ath', 'rat h', 'rath o',
+            # Mixed case bypass attempts
+            'SaGr', 'SAGR', 'RaTh', 'RATH', 'Sr', 'SR',
+            # Capital variations
+            'SAGR', 'SGARS', 'RATH', 'RTH'
         ]
         
         # Remove ALL special characters, spaces, and numbers for ultra-smart checking
@@ -405,6 +428,11 @@ def demo():
     # Your Python code logic will go here
     result = "Hello from Python! This is where your code output will be displayed."
     return render_template('demo.html', title='Demo - My Python Website', result=result)
+
+@app.route('/ads.txt')
+def ads_txt():
+    """Serve ads.txt file for AdSense verification"""
+    return send_from_directory('static', 'ads.txt', mimetype='text/plain')
 
 if __name__ == '__main__':
     # Get port from environment variable or use default
