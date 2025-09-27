@@ -297,7 +297,32 @@ def submit_rating():
 
 @app.route('/visitors')
 def view_visitors():
-    """View visitor statistics - Admin only"""
+    """View visitor statistics - Admin only with password protection"""
+    return render_template('admin_login.html', title='Admin Login', redirect_to='visitors')
+
+@app.route('/admin_login', methods=['POST'])
+def admin_login():
+    """Handle admin login"""
+    password = request.form.get('password')
+    redirect_to = request.form.get('redirect_to', 'visitors')
+    
+    # Admin password (change this to something secure)
+    ADMIN_PASSWORD = "sagar_admin_2025"
+    
+    if password == ADMIN_PASSWORD:
+        if redirect_to == 'visitors':
+            return redirect(url_for('view_visitors_admin'))
+        elif redirect_to == 'blocked':
+            return redirect(url_for('view_blocked_comments_admin'))
+    else:
+        return render_template('admin_login.html', 
+                             title='Admin Login', 
+                             error="Wrong password! Access denied! 🚫",
+                             redirect_to=redirect_to)
+
+@app.route('/admin/visitors')
+def view_visitors_admin():
+    """View visitor statistics - Admin only (after login)"""
     # Convert set to list for template rendering
     unique_count = len(visitors_data["unique_visitors"])
     
@@ -338,7 +363,12 @@ def delete_comment():
 
 @app.route('/blocked_comments')
 def view_blocked_comments():
-    """View all blocked attempts - Admin only"""
+    """View all blocked attempts - Redirect to admin login"""
+    return render_template('admin_login.html', title='Admin Login', redirect_to='blocked')
+
+@app.route('/admin/blocked_comments')
+def view_blocked_comments_admin():
+    """View all blocked attempts - Admin only (after login)"""
     all_blocks = {
         "profanity": ratings_data["blocked_attempts"],
         "spam": ratings_data["spam_attempts"], 

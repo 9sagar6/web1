@@ -2,7 +2,41 @@
 
 {% block content %}
 {% if show_admin_panel %}
-    <!-- Admin Panel for viewing                                                          <p class="text-warning"><strong>The website creator is STILL protected!</strong> 🛡️👑</p>                    <h4 class="text-danger">🔥 EXTRA ROAST FOR THE SMART FRIEND:</h4>          <p>Try being creative with OTHER people's names! 😝</p>  <p class="text-muted">But my AI is SMARTER than your tricks! 🧠🤖</p>locked attempts -->
+    <!-- Admin Panel for viewing                                         <a href="{{ url_for('home') }}" class="btn btn-primary btn-lg mt-3">
+                        Try Again (But Don't) 😏
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Rating System for Blocked Users -->
+            <div class="mt-4">
+                <div class="card border-info">
+                    <div class="card-body">
+                        <h5 class="text-info">📊 Rate This Roast Experience!</h5>
+                        <p>Even though you got blocked, rate how epic this protection is! 😎</p>
+                        
+                        <div class="rating-container text-center">
+                            <div class="stars mb-3">
+                                <span class="star" data-rating="1">⭐</span>
+                                <span class="star" data-rating="2">⭐</span>
+                                <span class="star" data-rating="3">⭐</span>
+                                <span class="star" data-rating="4">⭐</span>
+                                <span class="star" data-rating="5">⭐</span>
+                            </div>
+                            <textarea id="comment" class="form-control mb-3" placeholder="Comment on this epic defense system... 🛡️" rows="3"></textarea>
+                            <button id="submitRating" class="btn btn-success">Submit Rating</button>
+                        </div>
+                        
+                        <div id="ratingResult" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Extra savage response -->
+            <div class="mt-4">
+                <div class="card border-danger">
+                    <div class="card-body">
+                        <h4 class="text-danger">🔥 EXTRA ROAST FOR THE SMART FRIEND:</h4>                          <p class="text-warning"><strong>The website creator is STILL protected!</strong> 🛡️👑</p>                    <h4 class="text-danger">🔥 EXTRA ROAST FOR THE SMART FRIEND:</h4>          <p>Try being creative with OTHER people's names! 😝</p>  <p class="text-muted">But my AI is SMARTER than your tricks! 🧠🤖</p>locked attempts -->
     <div class="row">
         <div class="col-md-10 mx-auto">
             <h2>� Admin Panel - All Blocked Attempts</h2>
@@ -189,4 +223,80 @@
     }
 }
 </style>
+
+<script>
+// Rating system for blocked page
+document.addEventListener('DOMContentLoaded', function() {
+    const stars = document.querySelectorAll('.star');
+    const submitBtn = document.getElementById('submitRating');
+    const commentBox = document.getElementById('comment');
+    const resultDiv = document.getElementById('ratingResult');
+    let selectedRating = 0;
+
+    // Star click handlers
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            selectedRating = this.dataset.rating;
+            updateStars(selectedRating);
+        });
+        
+        star.addEventListener('mouseover', function() {
+            updateStars(this.dataset.rating);
+        });
+    });
+
+    // Reset stars on mouse leave
+    document.querySelector('.stars').addEventListener('mouseleave', function() {
+        updateStars(selectedRating);
+    });
+
+    function updateStars(rating) {
+        stars.forEach((star, index) => {
+            if (index < rating) {
+                star.style.color = '#ffc107';
+                star.style.textShadow = '0 0 10px #ffc107';
+            } else {
+                star.style.color = '#ddd';
+                star.style.textShadow = 'none';
+            }
+        });
+    }
+
+    // Submit rating
+    if (submitBtn) {
+        submitBtn.addEventListener('click', function() {
+            if (selectedRating === 0) {
+                resultDiv.innerHTML = '<div class="alert alert-warning">Please select a star rating! ⭐</div>';
+                return;
+            }
+
+            const comment = commentBox ? commentBox.value : '';
+            
+            fetch('/rate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    rating: selectedRating,
+                    comment: comment
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    resultDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Rating Submitted!';
+                } else {
+                    resultDiv.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+                }
+            })
+            .catch(error => {
+                resultDiv.innerHTML = '<div class="alert alert-danger">Error submitting rating. Try again!</div>';
+            });
+        });
+    }
+});
+</script>
 {% endblock %}
