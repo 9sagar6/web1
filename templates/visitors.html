@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mx-auto">
+        <h2>📊 Visitor Statistics</h2>
+        <p class="text-muted">Track who's visiting your roasting website!</p>
+        
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card text-center bg-primary text-white">
+                    <div class="card-body">
+                        <h3>{{ stats.total_visits }}</h3>
+                        <p class="mb-0">Total Visits</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center bg-success text-white">
+                    <div class="card-body">
+                        <h3>{{ stats.unique_visitors }}</h3>
+                        <p class="mb-0">Unique Visitors</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center bg-warning text-white">
+                    <div class="card-body">
+                        <h3>{{ stats.total_roasts }}</h3>
+                        <p class="mb-0">People Roasted</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center bg-info text-white">
+                    <div class="card-body">
+                        <h3>{{ ((stats.total_roasts / stats.total_visits * 100) | round(1) if stats.total_visits > 0 else 0) }}%</h3>
+                        <p class="mb-0">Roast Rate</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Visitors -->
+        <div class="card">
+            <div class="card-header">
+                <h4>🔍 Recent Activity (Last 50 visits)</h4>
+            </div>
+            <div class="card-body">
+                {% if stats.recent_visitors %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>IP Address</th>
+                                    <th>Page</th>
+                                    <th>Name (if roasted)</th>
+                                    <th>Device/Browser</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for visitor in stats.recent_visitors|reverse %}
+                                <tr>
+                                    <td>
+                                        <small>{{ visitor.timestamp.split('T')[0] }}<br>
+                                        {{ visitor.timestamp.split('T')[1].split('.')[0] }}</small>
+                                    </td>
+                                    <td>
+                                        <code>{{ visitor.ip }}</code>
+                                    </td>
+                                    <td>
+                                        {% if visitor.page == 'roast' %}
+                                            <span class="badge bg-danger">🔥 ROASTED</span>
+                                        {% elif visitor.page == 'home' %}
+                                            <span class="badge bg-primary">🏠 Home</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ visitor.page }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if visitor.name %}
+                                            <strong>"{{ visitor.name }}"</strong>
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small title="{{ visitor.user_agent }}">
+                                            {% if 'Mobile' in visitor.user_agent %}
+                                                📱 Mobile
+                                            {% elif 'Chrome' in visitor.user_agent %}
+                                                🌐 Chrome
+                                            {% elif 'Firefox' in visitor.user_agent %}
+                                                🦊 Firefox
+                                            {% elif 'Safari' in visitor.user_agent %}
+                                                🧭 Safari
+                                            {% else %}
+                                                💻 Other
+                                            {% endif %}
+                                        </small>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info text-center">
+                        <h4>No visitors yet! 👻</h4>
+                        <p>Share your website to start seeing visitor data!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('home') }}" class="btn btn-primary">Back to Roaster</a>
+            <a href="{{ url_for('view_ratings') }}" class="btn btn-outline-info ms-2">View Ratings</a>
+        </div>
+
+        <!-- Live Stats Auto-Refresh -->
+        <div class="alert alert-info mt-3">
+            <strong>📈 Live Tracking:</strong> This page shows real-time visitor data. Refresh to see the latest stats!
+            <button onclick="location.reload()" class="btn btn-sm btn-outline-primary ms-2">🔄 Refresh</button>
+        </div>
+    </div>
+</div>
+
+<style>
+.table th {
+    font-size: 0.9rem;
+}
+.table td {
+    font-size: 0.85rem;
+}
+</style>
+{% endblock %}

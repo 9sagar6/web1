@@ -1,0 +1,353 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if show_admin_panel %}
+    <!-- Admin Panel for viewing                                         <a href="{{ url_for('home') }}" class="btn btn-primary btn-lg mt-3">
+                        Try Again (But Don't) 😏
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Rating System for Creator Protection Block -->
+            <div class="mt-4">
+                <div class="card border-info">
+                    <div class="card-body">
+                        <h5 class="text-info">📊 Rate This Epic Creator Protection!</h5>
+                        <p>You got absolutely ROASTED trying to use the creator's name! Rate this defense system! �️</p>
+                        
+                        <div class="rating-container text-center">
+                            <div class="stars mb-3">
+                                <span class="star" data-rating="1">⭐</span>
+                                <span class="star" data-rating="2">⭐</span>
+                                <span class="star" data-rating="3">⭐</span>
+                                <span class="star" data-rating="4">⭐</span>
+                                <span class="star" data-rating="5">⭐</span>
+                            </div>
+                            <p class="text-muted">Current Rating: <span id="currentRating">{{ average_rating or 0 }}</span>/5 ({{ total_ratings or 0 }} ratings)</p>
+                            <textarea id="comment" class="form-control mb-3" placeholder="Comment on how epic this creator protection is... 😎🛡️" rows="3"></textarea>
+                            <button id="submitRating" class="btn btn-success">Submit Rating</button>
+                        </div>
+                        
+                        <div id="ratingResult" class="mt-3"></div>
+                        
+                        <div class="mt-3">
+                            <small class="text-info">
+                                💡 <strong>Pro Tip:</strong> The AI detected your attempt and protected the creator! 
+                                Rate how impressed you are! 🤖👑
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Extra savage response -->
+            <div class="mt-4">
+                <div class="card border-danger">
+                    <div class="card-body">
+                        <h4 class="text-danger">🔥 EXTRA ROAST FOR THE SMART FRIEND:</h4>                          <p class="text-warning"><strong>The website creator is STILL protected!</strong> 🛡️👑</p>                    <h4 class="text-danger">🔥 EXTRA ROAST FOR THE SMART FRIEND:</h4>          <p>Try being creative with OTHER people's names! 😝</p>  <p class="text-muted">But my AI is SMARTER than your tricks! 🧠🤖</p>locked attempts -->
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <h2>� Admin Panel - All Blocked Attempts</h2>
+            
+            <!-- Profanity Blocks -->
+            <h3 class="text-danger">🤬 Profanity Blocked</h3>
+            {% if blocked_data.profanity %}
+                <div class="alert alert-danger">
+                    <strong>Total Profanity Blocks:</strong> {{ blocked_data.profanity|length }}
+                </div>
+                {% for attempt in blocked_data.profanity %}
+                    <div class="card mb-3 border-danger">
+                        <div class="card-body">
+                            <h6 class="text-danger">🚫 PROFANITY BLOCKED</h6>
+                            <p><strong>Content:</strong> "{{ attempt.comment or attempt.name }}"</p>
+                            <small class="text-muted">{{ attempt.timestamp }} | IP: {{ attempt.ip }}</small>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-success">No profanity attempts!</div>
+            {% endif %}
+            
+            <!-- Spam Blocks -->
+            <h3 class="text-warning">🤖 Spam Blocked</h3>
+            {% if blocked_data.spam %}
+                <div class="alert alert-warning">
+                    <strong>Total Spam Blocks:</strong> {{ blocked_data.spam|length }}
+                </div>
+                {% for attempt in blocked_data.spam %}
+                    <div class="card mb-3 border-warning">
+                        <div class="card-body">
+                            <h6 class="text-warning">🤖 SPAM BLOCKED</h6>
+                            <p><strong>Content:</strong> "{{ attempt.comment }}"</p>
+                            <small class="text-muted">{{ attempt.timestamp }} | IP: {{ attempt.ip }}</small>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-success">No spam attempts!</div>
+            {% endif %}
+            
+            <!-- Duplicate Blocks -->
+            <h3 class="text-info">🔄 Duplicates Blocked</h3>
+            {% if blocked_data.duplicates %}
+                <div class="alert alert-info">
+                    <strong>Total Duplicate Blocks:</strong> {{ blocked_data.duplicates|length }}
+                </div>
+                {% for attempt in blocked_data.duplicates %}
+                    <div class="card mb-3 border-info">
+                        <div class="card-body">
+                            <h6 class="text-info">🔄 DUPLICATE BLOCKED</h6>
+                            <p><strong>Content:</strong> "{{ attempt.comment }}"</p>
+                            <small class="text-muted">{{ attempt.timestamp }} | IP: {{ attempt.ip }}</small>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-success">No duplicate attempts!</div>
+            {% endif %}
+            
+            <div class="text-center mt-4">
+                <a href="{{ url_for('view_ratings') }}" class="btn btn-primary">Back to Ratings</a>
+                <a href="{{ url_for('home') }}" class="btn btn-outline-primary ms-2">Home</a>
+            </div>
+        </div>
+    </div>
+{% elif reason == "profanity" %}
+    <!-- Profanity in Name Block -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="card border-danger">
+                <div class="card-body">
+                    <h1 class="display-1 text-danger mb-4">🤬</h1>
+                    <h2 class="card-title text-danger mb-4">AI PROFANITY DETECTED!</h2>
+                    <h3 class="text-warning mb-3">Your name contains inappropriate language! 🚫</h3>
+                    <p class="lead">You tried: <strong>"{{ attempted_name }}"</strong></p>
+                    <p class="text-muted">But my AI filter caught that! 🤖🛡️</p>
+                    
+                    <div class="alert alert-danger mt-4">
+                        <h5>🤖 AI PROTECTION ACTIVATED:</h5>
+                        <p><strong>Advanced profanity detection active!</strong></p>
+                        <p>English & Hindi words blocked ❌</p>
+                        <p>Leetspeak variations blocked ❌</p>
+                        <p>Symbol substitutions blocked ❌</p>
+                        <p><strong>KEEP IT CLEAN!</strong> 🧼</p>
+                    </div>
+                    
+                    <a href="{{ url_for('home') }}" class="btn btn-primary btn-lg mt-3">
+                        Try Again With Clean Name 🧼
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <!-- Original Name Blocked View -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="card border-success">
+                <div class="card-body">
+                    <h1 class="display-1 text-success mb-4">🛡️</h1>
+                    <h2 class="card-title text-success mb-4">NICE TRY, SMARTASS! 😏</h2>
+                    <h3 class="text-warning mb-3">Did you really think @ symbols would fool me? 🤣</h3>
+                    <p class="lead">You tried: <strong>"{{ attempted_name }}"</strong></p>
+                    <p class="text-muted">But my AI is SMARTER than your tricks! 🧠�</p>
+                    
+                    <div class="alert alert-danger mt-4">
+                        <h5>🕵️ ULTRA-DETECTION ACTIVATED:</h5>
+                        <p>S@GAR = SAGAR ❌</p>
+                        <p>$AGAR = SAGAR ❌</p>
+                        <p>$@G@R = SAGAR ❌</p>
+                        <p>R@THORE = RATHORE ❌</p>
+                        <p>R$THORE = RATHORE ❌</p>
+                        <p>S4G4R = SAGAR ❌</p>
+                        <p>R47H0R3 = RATHORE ❌</p>
+                        <p><strong>NO SYMBOL CAN SAVE YOU!</strong> 😈🛡️</p>
+                    </div>
+                    
+                    <div class="alert alert-info mt-3">
+                        <h5>🎯 For Your Information:</h5>
+                        <p>This website uses ADVANCED name filtering!</p>
+                        <p>Try being creative with OTHER people's names! �</p>
+                    </div>
+                    
+                    <a href="{{ url_for('home') }}" class="btn btn-primary btn-lg mt-3">
+                        Try Again (But Don't) 😏
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Rating System for Creator Protection Block -->
+            <div class="mt-4">
+                <div class="card border-info">
+                    <div class="card-body">
+                        <h5 class="text-info">📊 Rate This Epic Creator Protection!</h5>
+                        <p>You got absolutely ROASTED trying to use the creator's name! Rate this defense system! 🛡️</p>
+                        
+                        <div class="rating-container text-center">
+                            <div class="stars mb-3">
+                                <span class="star" data-rating="1">⭐</span>
+                                <span class="star" data-rating="2">⭐</span>
+                                <span class="star" data-rating="3">⭐</span>
+                                <span class="star" data-rating="4">⭐</span>
+                                <span class="star" data-rating="5">⭐</span>
+                            </div>
+                            <p class="text-muted">Current Rating: <span id="currentRating">{{ average_rating or 0 }}</span>/5 ({{ total_ratings or 0 }} ratings)</p>
+                            <textarea id="comment" class="form-control mb-3" placeholder="Comment on how epic this creator protection is... 😎🛡️" rows="3"></textarea>
+                            <button id="submitRating" class="btn btn-success">Submit Rating</button>
+                        </div>
+                        
+                        <div id="ratingResult" class="mt-3"></div>
+                        
+                        <div class="mt-3">
+                            <small class="text-info">
+                                💡 <strong>Pro Tip:</strong> The AI detected your attempt and protected the creator! 
+                                Rate how impressed you are! 🤖👑
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Extra savage response -->
+            <div class="mt-4">
+                <div class="card border-danger">
+                    <div class="card-body">
+                        <h4 class="text-danger">� EXTRA ROAST FOR THE SMART FRIEND:</h4>
+                        <h3 class="text-danger">FUCK YOU FOR THINKING YOU'RE CLEVER!</h3>
+                        <p class="text-muted">Using @ symbols? Really? That's your master plan? 😂</p>
+                        <p class="text-warning"><strong>The website creator is STILL protected!</strong> 🛡️�</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}<style>
+.display-1 {
+    font-size: 5rem;
+    animation: shield 2s infinite;
+}
+
+@keyframes shield {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px #28a745);
+    }
+    50% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 20px #28a745);
+    }
+}
+
+.card-body {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-body::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(40, 167, 69, 0.1), transparent);
+    animation: sweep 3s infinite;
+}
+
+@keyframes sweep {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.star {
+    font-size: 2rem;
+    cursor: pointer;
+    color: #ddd;
+    transition: color 0.3s;
+}
+
+.star:hover {
+    color: #ffc107;
+}
+</style>
+
+<script>
+// Rating system for blocked page
+document.addEventListener('DOMContentLoaded', function() {
+    const stars = document.querySelectorAll('.star');
+    const submitBtn = document.getElementById('submitRating');
+    const commentBox = document.getElementById('comment');
+    const resultDiv = document.getElementById('ratingResult');
+    let selectedRating = 0;
+
+    // Star click handlers
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            selectedRating = this.dataset.rating;
+            updateStars(selectedRating);
+        });
+        
+        star.addEventListener('mouseover', function() {
+            updateStars(this.dataset.rating);
+        });
+    });
+
+    // Reset stars on mouse leave
+    document.querySelector('.stars').addEventListener('mouseleave', function() {
+        updateStars(selectedRating);
+    });
+
+    function updateStars(rating) {
+        stars.forEach((star, index) => {
+            if (index < rating) {
+                star.style.color = '#ffc107';
+                star.style.textShadow = '0 0 10px #ffc107';
+            } else {
+                star.style.color = '#ddd';
+                star.style.textShadow = 'none';
+            }
+        });
+    }
+
+    // Submit rating
+    if (submitBtn) {
+        submitBtn.addEventListener('click', function() {
+            if (selectedRating === 0) {
+                resultDiv.innerHTML = '<div class="alert alert-warning">Please select a star rating! ⭐</div>';
+                return;
+            }
+
+            const comment = commentBox ? commentBox.value : '';
+            
+            fetch('/rate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    rating: selectedRating,
+                    comment: comment
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    resultDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Rating Submitted!';
+                } else {
+                    resultDiv.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+                }
+            })
+            .catch(error => {
+                resultDiv.innerHTML = '<div class="alert alert-danger">Error submitting rating. Try again!</div>';
+            });
+        });
+    }
+});
+</script>
+{% endblock %}
