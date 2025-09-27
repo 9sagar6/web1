@@ -62,23 +62,46 @@ def contains_profanity(text):
     return False
 
 def contains_profanity_excluding_creator(text):
-    """Profanity detection that excludes creator names"""
+    """Profanity detection that excludes creator names and allowed names"""
     if not text:
         return False
     
     # Creator names that should NOT be flagged as profanity
     creator_names = ['sagar', 'rathore', 'sagarrathore', 's4g4r', 'r4th0r3', 'r47h0r3']
     
+    # Allowed names that contain blocked substrings but are legitimate
+    allowed_names = [
+        'kshitij', 'kshitijs', 'kshitija', 'kshitijadhikari', 
+        'k$hitij', 'ksh1tij', 'ksh!tij', 'ksh*tij'
+    ]
+    
+    # Check if the input is an allowed name (case-insensitive)
+    text_lower = text.lower().strip()
+    clean_text = re.sub(r'[^a-zA-Z0-9]', '', text_lower)
+    
+    # Check against allowed names first
+    for allowed in allowed_names:
+        allowed_clean = re.sub(r'[^a-zA-Z0-9]', '', allowed.lower())
+        if (text_lower == allowed.lower() or 
+            clean_text == allowed_clean or
+            text_lower == allowed_clean):
+            return False  # It's an allowed name, don't block it
+    
     # Create a filtered blocked words list (excluding creator names)
     filtered_blocked_words = [word for word in BLOCKED_WORDS if word not in creator_names]
     
-    text_lower = text.lower()
-    # Remove special characters for checking
+    # Remove special characters for checking  
     clean_text = re.sub(r'[^a-zA-Z0-9\s]', '', text_lower)
     
     # Convert leetspeak to normal letters
     leetspeak_text = text_lower.replace('@', 'a').replace('$', 's').replace('4', 'a').replace('0', 'o').replace('3', 'e').replace('1', 'i').replace('7', 't')
     leetspeak_clean = re.sub(r'[^a-zA-Z0-9\s]', '', leetspeak_text)
+    
+    for word in filtered_blocked_words:
+        if (word in text_lower or word in clean_text or 
+            word in leetspeak_text or word in leetspeak_clean):
+            return True
+    return False
     
     for word in filtered_blocked_words:
         if (word in text_lower or word in clean_text or 
