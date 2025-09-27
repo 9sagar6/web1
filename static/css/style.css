@@ -60,7 +60,23 @@ pre code {
     
     .ad-banner {
         min-height: 100px;
+        margin: 20px 0;
     }
+}
+
+/* AdSense 2025 Optimization */
+.adsbygoogle {
+    margin: 20px auto;
+    clear: both;
+    text-align: center;
+}
+
+/* In-feed ad styling */
+ins.adsbygoogle[data-ad-layout="in-article"] {
+    margin: 30px 0;
+    padding: 20px;
+    background: rgba(0,0,0,0.02);
+    border-radius: 8px;
 }
 
 footer {

@@ -5,11 +5,12 @@
 <div class="row justify-content-center mb-4">
     <div class="col-md-10 text-center">
         <div class="ad-banner">
+            <!-- Responsive Display Ad (Best for 2025 Approval) -->
             <ins class="adsbygoogle"
                  style="display:block"
                  data-ad-client="ca-pub-3268994719996865"
-                 data-ad-slot="1234567890"
-                 data-ad-format="auto"
+                 data-ad-slot="auto"
+                 data-ad-format="rectangle, horizontal"
                  data-full-width-responsive="true"></ins>
             <script>
                  (adsbygoogle = window.adsbygoogle || []).push({});
@@ -28,6 +29,20 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title text-center mb-4">What's Your Name?</h5>
+                
+                <!-- In-Feed Ad (2025 AdSense Best Practice) -->
+                <div class="text-center mb-4">
+                    <ins class="adsbygoogle"
+                         style="display:block; text-align:center;"
+                         data-ad-layout="in-article"
+                         data-ad-format="fluid"
+                         data-ad-client="ca-pub-3268994719996865"
+                         data-ad-slot="auto"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+                
                 <form action="{{ url_for('submit_name') }}" method="POST">
                     <div class="mb-3">
                         <label for="name" class="form-label">Enter your name:</label>

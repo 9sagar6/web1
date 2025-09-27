@@ -7,6 +7,13 @@ import re
 # Rating system added - Force redeploy
 app = Flask(__name__)
 
+# Custom static file handler for ads.txt at root level
+@app.route('/ads.txt')
+def ads_txt():
+    """Serve ads.txt file for AdSense verification - Direct content"""
+    ads_content = "google.com, pub-3268994719996865, DIRECT, f08c47fec0942fa0"
+    return Response(ads_content, mimetype='text/plain')
+
 # Comprehensive profanity filter - English and Hindi
 BLOCKED_WORDS = [
     # English profanity
@@ -428,11 +435,6 @@ def demo():
     # Your Python code logic will go here
     result = "Hello from Python! This is where your code output will be displayed."
     return render_template('demo.html', title='Demo - My Python Website', result=result)
-
-@app.route('/ads.txt')
-def ads_txt():
-    """Serve ads.txt file for AdSense verification"""
-    return send_from_directory('static', 'ads.txt', mimetype='text/plain')
 
 if __name__ == '__main__':
     # Get port from environment variable or use default
