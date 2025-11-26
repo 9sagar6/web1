@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Top Ad Banner -->
+<div class="row justify-content-center mb-4">
+    <div class="col-md-10 text-center">
+        <div class="ad-banner">
+            <!-- Responsive Display Ad (Best for 2025 Approval) -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-3268994719996865"
+                 data-ad-slot="auto"
+                 data-ad-format="rectangle, horizontal"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </div>
+</div>
+
+<div class="jumbotron bg-primary text-white p-5 rounded mb-4">
+    <h1 class="display-4">Welcome!</h1>
+    <p class="lead">Enter your name to get a personalized message</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title text-center mb-4">What's Your Name?</h5>
+                
+                <!-- In-Feed Ad (2025 AdSense Best Practice) -->
+                <div class="text-center mb-4">
+                    <ins class="adsbygoogle"
+                         style="display:block; text-align:center;"
+                         data-ad-layout="in-article"
+                         data-ad-format="fluid"
+                         data-ad-client="ca-pub-3268994719996865"
+                         data-ad-slot="auto"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+                
+                <form action="{{ url_for('submit_name') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Enter your name:</label>
+                        <input type="text" class="form-control form-control-lg" id="name" name="name" required placeholder="Type your name here...">
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Side Ad for Desktop -->
+        <div class="d-none d-md-block mt-4 text-center">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-3268994719996865"
+                 data-ad-slot="0987654321"
+                 data-ad-format="rectangle"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </div>
+</div>
+
+<!-- Bottom Ad Banner -->
+<div class="row justify-content-center mt-5">
+    <div class="col-md-10 text-center">
+        <div class="ad-banner">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-3268994719996865"
+                 data-ad-slot="1111222233"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+        </div>
+    </div>
+</div>
+{% endblock %}
